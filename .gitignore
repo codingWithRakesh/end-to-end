@@ -1,4 +1,3 @@
-client
 client/build
 client/node_modules
 client/.env
