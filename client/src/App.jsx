@@ -23,12 +23,12 @@ function App() {
 
   // Generate or reuse key pair
   async function initKeys() {
-    const resPublicKey = await fetch(`${API_URL}/api/get-private-key?userId=${userId}`);
-    const {privateKey : existingPrivateKey} = await resPublicKey.json();
+    const resPrivateKey = await fetch(`${API_URL}/api/get-private-key?userId=${userId}`);
+    const { privateKey: existingPrivateKey } = await resPrivateKey.json();
     // console.log({ existinGPublicKey });
 
-    const resPrivateKey = await fetch(`${API_URL}/api/get-public-key?userId=${userId}`);
-    const {publicKey : existingPublicKey} = await resPrivateKey.json();
+    const resPublicKey = await fetch(`${API_URL}/api/get-public-key?userId=${userId}`);
+    const { publicKey: existingPublicKey } = await resPublicKey.json();
     // console.log({ existingPrivateKey }); 
 
     // const existingPrivateKey = localStorage.getItem("privateKey");
@@ -78,8 +78,8 @@ function App() {
     const privateKeyB64 = arrayBufferToBase64(privateKey);
 
     // save locally
-    localStorage.setItem("privateKey", privateKeyB64);
-    localStorage.setItem("publicKey", publicKeyB64);
+    // localStorage.setItem("privateKey", privateKeyB64);
+    // localStorage.setItem("publicKey", publicKeyB64);
 
     // save to server
 
@@ -160,11 +160,16 @@ function App() {
       const res = await fetch(`${API_URL}/api/get-group-messages?groupId=${groupId}`);
       const msgs = await res.json();
 
-      const privateKeyBase64 = localStorage.getItem("privateKey");
+      // const privateKeyBase64 = localStorage.getItem("privateKey");
+      const resPrivateKey = await fetch(`${API_URL}/api/get-private-key?userId=${userId}`);
+      const { privateKey: privateKeyBase64 } = await resPrivateKey.json();
+
+      // const privateKeyBase64 = localStorage.getItem("privateKey");
       if (!privateKeyBase64) {
         console.error("❌ Private key missing");
         return;
       }
+      console.log({ privateKeyBase64 });
 
       const privateKey = await window.crypto.subtle.importKey(
         "pkcs8",

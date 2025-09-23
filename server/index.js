@@ -16,10 +16,7 @@ connectDB();
 app.post('/api/save-public-key', async (req, res) => {
     const { userId, publicKey } = req.body;
     const existingUser = await User.findOne({ userId });
-    if (existingUser) {
-        existingUser.publicKey = publicKey;
-        await existingUser.save();
-    } else {
+    if (!existingUser) {
         await User.create(
             { userId, publicKey },
         );
@@ -57,15 +54,16 @@ app.get('/api/get-group-messages', async (req, res) => {
 
 app.post('/api/save-private-key', async (req, res) => {
     const { userId, privateKey } = req.body;
-    
-    const key = await PrivateKey.create(
-        { userId, privateKey },
-    );
-    if(!key) {
-        return res.status(500).json({ message: 'Failed to save private key' });
+
+    const existingKey = await PrivateKey.findOne({ userId });
+    if (!existingKey) {
+        await PrivateKey.create(
+            { userId, privateKey },
+        );
     }
     res.json({ message: 'Private key saved' });
 });
+
 
 app.get('/api/get-private-key', async (req, res) => {
     const { userId } = req.query;
