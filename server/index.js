@@ -71,7 +71,7 @@ app.get('/api/get-private-key', async (req, res) => {
     if (record) {
         res.status(200).json({ privateKey: record.privateKey });
     } else {
-        res.status(404).json({ message: 'Private key not found' });
+        res.status(404).json({ message: 'Private key not found' })
     }
 });
 
