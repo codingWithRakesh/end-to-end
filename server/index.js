@@ -81,7 +81,7 @@ app.get('/api/get-public-key', async (req, res) => {
     if (user) {
         res.status(200).json({ publicKey: user.publicKey });
     } else {
-        res.status(404).json({ message: 'Public key not found' });
+        res.status(404).json({ message: 'Public key not found' })
     }
 });
 
